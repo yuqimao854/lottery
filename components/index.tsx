@@ -1,3 +1,3 @@
-import TurnTable from './TurnTable';
-
-export { TurnTable };
+import TurnTable from "./TurnTable";
+import Weekend from "./Weekend";
+export { TurnTable, Weekend };
