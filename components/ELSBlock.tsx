@@ -462,7 +462,7 @@ export const ELSBlock: FC = () => {
   return (
     <div>
       <div>
-        <div style={{ marginBottom: 50, display: 'flex' }}>
+        <div className='flex mb-4'>
           <div
             onClick={() => {
               isStart.current = true;
@@ -489,6 +489,8 @@ export const ELSBlock: FC = () => {
           >
             reset
           </div>
+        </div>
+        <div className='flex mt-10'>
           <div
             className='mr-4'
             onClick={() => {
@@ -513,7 +515,7 @@ export const ELSBlock: FC = () => {
             down
           </div>
         </div>
-        <div>{totalScore.current}</div>
+        <div className='mt-10  mb-10'>{totalScore.current}</div>
         <div
           style={{
             position: 'relative',
@@ -522,15 +524,15 @@ export const ELSBlock: FC = () => {
           }}
         >
           <div>
-            {showList.map((item) => {
+            {showList.map((item, index) => {
               return (
-                <div style={{ display: 'flex' }} key={item}>
+                <div style={{ display: 'flex' }} key={'main' + index}>
                   {decimalToBinary(item)
                     .split('')
-                    .map((item) => {
+                    .map((item, index) => {
                       return (
                         <div
-                          key={item}
+                          key={'sub' + index}
                           style={{
                             opacity: item === '1' ? 1 : 0,
                             background: '#191B1F',
@@ -554,15 +556,15 @@ export const ELSBlock: FC = () => {
               left: 0,
             }}
           >
-            {moving.map((item) => {
+            {moving.map((item, index) => {
               return (
-                <div key={item} style={{ display: 'flex' }}>
+                <div key={'moving-main' + index} style={{ display: 'flex' }}>
                   {decimalToBinary(item)
                     .split('')
-                    .map((item) => {
+                    .map((item, index) => {
                       return (
                         <div
-                          key={item}
+                          key={'moving-sub' + index}
                           style={{
                             background: '#191B1F',
                             opacity: item === '1' ? 1 : 0,
