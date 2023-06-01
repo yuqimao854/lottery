@@ -162,7 +162,7 @@ export const ELSBlock: FC = () => {
 
   const isTrigger = (movingList: number[], targetList: number[]) => {
     let isTrigger = false;
-    const lastNewIndex = movingList.findLastIndex((item) => item);
+    const lastNewIndex = (movingList as any).findLastIndex((item: any) => item);
     const movingBinary = decimalToBinary(movingList[lastNewIndex] ?? 0);
     const targetBinary = decimalToBinary(targetList[lastNewIndex] ?? 0);
     movingBinary.split('').map((item, index) => {
@@ -524,12 +524,13 @@ export const ELSBlock: FC = () => {
           <div>
             {showList.map((item) => {
               return (
-                <div style={{ display: 'flex' }}>
+                <div style={{ display: 'flex' }} key={item}>
                   {decimalToBinary(item)
                     .split('')
                     .map((item) => {
                       return (
                         <div
+                          key={item}
                           style={{
                             opacity: item === '1' ? 1 : 0,
                             background: '#191B1F',
@@ -555,12 +556,13 @@ export const ELSBlock: FC = () => {
           >
             {moving.map((item) => {
               return (
-                <div style={{ display: 'flex' }}>
+                <div key={item} style={{ display: 'flex' }}>
                   {decimalToBinary(item)
                     .split('')
                     .map((item) => {
                       return (
                         <div
+                          key={item}
                           style={{
                             background: '#191B1F',
                             opacity: item === '1' ? 1 : 0,
