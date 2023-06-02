@@ -593,14 +593,14 @@ export const ELSBlock: FC = () => {
                         <div
                           key={'sub' + index}
                           style={{
-                            // opacity: item === '1' ? 1 : 0,
-                            background: 'white',
+                            opacity: item === '1' ? 1 : 0,
+                            background: '#191B1F',
                             margin: 1,
                             width: 30,
                             height: 30,
                           }}
                         >
-                          {item}
+                          {/* {item} */}
                         </div>
                       );
                     })}
@@ -625,14 +625,14 @@ export const ELSBlock: FC = () => {
                         <div
                           key={'moving-sub' + index}
                           style={{
-                            background: 'white',
+                            background: '#191B1F',
                             opacity: item === '1' ? 1 : 0,
                             width: 30,
                             height: 30,
                             margin: 1,
                           }}
                         >
-                          {item}
+                          {/* {item} */}
                         </div>
                       );
                     })}
