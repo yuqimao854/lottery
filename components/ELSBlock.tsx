@@ -164,13 +164,18 @@ export const ELSBlock: FC = () => {
 
   const isTrigger = (movingList: number[], targetList: number[]) => {
     let isTrigger = false;
-    const lastNewIndex = (movingList as any).findLastIndex((item: any) => item);
-    const movingBinary = decimalToBinary(movingList[lastNewIndex] ?? 0);
-    const targetBinary = decimalToBinary(targetList[lastNewIndex] ?? 0);
-    movingBinary.split('').map((item, index) => {
-      if (item === '1' && targetBinary[index] === '1') {
-        isTrigger = true;
+    targetList.map((item, index) => {
+      if (!item) {
+        return;
       }
+      const lastNewIndex = index;
+      const movingBinary = decimalToBinary(movingList[lastNewIndex] ?? 0);
+      const targetBinary = decimalToBinary(targetList[lastNewIndex] ?? 0);
+      movingBinary.split('').map((item, index) => {
+        if (item === '1' && targetBinary[index] === '1') {
+          isTrigger = true;
+        }
+      });
     });
     return isTrigger;
   };
