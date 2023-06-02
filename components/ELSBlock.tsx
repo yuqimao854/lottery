@@ -82,9 +82,11 @@ export const ELSBlock: FC = () => {
   const [showList, setShowList] = useState(new Array(ROW).fill(0));
 
   const [moving, setMoving] = useState(new Array(ROW).fill(0));
+  const [isPaused, setIsPaused] = useState(false);
+  const [isStared, setIsStared] = useState(false);
   const showListRef = useRef(showList);
   const movingRef = useRef(moving);
-  const isStart = useRef(false);
+  const isGaming = useRef(false);
   const movingType = useRef({
     type: EType.I,
     transferred: false,
@@ -196,14 +198,16 @@ export const ELSBlock: FC = () => {
     });
     setMoving(newMoving);
     if (isTrigger(newMoving, showListRef.current)) {
-      isStart.current = false;
+      isGaming.current = false;
+      setIsPaused(false);
+      setIsStared(false);
       timer && clearInterval(timer);
       console.log('over');
     }
   };
 
   const handleDown = () => {
-    if (!isStart.current) {
+    if (!isGaming.current) {
       return;
     }
     const newMoving = onDown(movingRef.current);
@@ -220,7 +224,7 @@ export const ELSBlock: FC = () => {
   };
 
   const handleLeft = () => {
-    if (!isStart.current) {
+    if (!isGaming.current) {
       return;
     }
     const newMoving = onLeft(movingRef.current);
@@ -231,7 +235,7 @@ export const ELSBlock: FC = () => {
   };
 
   const handleRight = () => {
-    if (!isStart.current) {
+    if (!isGaming.current) {
       return;
     }
     const newMoving = onRight(movingRef.current);
@@ -421,7 +425,7 @@ export const ELSBlock: FC = () => {
     return { list, transferred: false };
   };
   const handleTransfer = () => {
-    if (!isStart.current) {
+    if (!isGaming.current) {
       return;
     }
     const { list: newTransfer, transferred } = onTransfer(
@@ -437,21 +441,45 @@ export const ELSBlock: FC = () => {
     setMoving(newTransfer);
   };
 
+  const onDrop = () => {
+    if (!isGaming.current) {
+      return;
+    }
+    let resultMoving: number[] = [];
+    let moving = movingRef.current;
+    while (1) {
+      if (isTrigger(onDown(moving), showListRef.current) || moving.at(-1)) {
+        resultMoving = moving;
+        break;
+      }
+      moving = onDown(moving);
+    }
+
+    setMoving(resultMoving);
+  };
+
   useEffect(() => {
     document.addEventListener('keydown', (e) => {
-      switch (e.key) {
+      switch (e.code) {
         case 'ArrowLeft':
+          e.preventDefault();
           handleLeft();
           break;
         case 'ArrowRight':
+          e.preventDefault();
           handleRight();
           break;
         case 'ArrowDown':
+          e.preventDefault();
           handleDown();
           break;
         case 'ArrowUp':
           e.preventDefault();
           handleTransfer();
+          break;
+        case 'Space':
+          e.preventDefault();
+          onDrop();
           break;
         default:
           break;
@@ -465,7 +493,11 @@ export const ELSBlock: FC = () => {
         <div className='flex mb-4'>
           <div
             onClick={() => {
-              isStart.current = true;
+              if (isStared) {
+                return;
+              }
+              setIsStared(true);
+              isGaming.current = true;
               totalScore.current = 0;
               handleStart();
               timer = setInterval(() => {
@@ -479,9 +511,28 @@ export const ELSBlock: FC = () => {
           <div
             className='mr-4'
             onClick={() => {
+              if (isGaming.current) {
+                timer && clearInterval(timer);
+                timer = null;
+              } else {
+                timer = setInterval(() => {
+                  handleDown();
+                }, 600);
+              }
+              isGaming.current = !isGaming.current;
+              setIsPaused(!isPaused);
+            }}
+          >
+            {isPaused ? 'continue' : 'pause'}
+          </div>
+          <div
+            className='mr-4'
+            onClick={() => {
+              setIsPaused(false);
+              setIsStared(false);
               setMoving(new Array(ROW).fill(0));
               setShowList(new Array(ROW).fill(0));
-              isStart.current = false;
+              isGaming.current = false;
               totalScore.current = 0;
               timer && clearInterval(timer);
               timer = null;
@@ -508,11 +559,19 @@ export const ELSBlock: FC = () => {
             right
           </div>
           <div
+            className='mr-4'
             onClick={() => {
               handleDown();
             }}
           >
             down
+          </div>
+          <div
+            onClick={() => {
+              onDrop();
+            }}
+          >
+            drop
           </div>
         </div>
         <div className='mt-10  mb-10'>{totalScore.current}</div>
@@ -534,14 +593,14 @@ export const ELSBlock: FC = () => {
                         <div
                           key={'sub' + index}
                           style={{
-                            opacity: item === '1' ? 1 : 0,
-                            background: '#191B1F',
+                            // opacity: item === '1' ? 1 : 0,
+                            background: 'white',
                             margin: 1,
                             width: 30,
                             height: 30,
                           }}
                         >
-                          {/* {item} */}
+                          {item}
                         </div>
                       );
                     })}
@@ -566,14 +625,14 @@ export const ELSBlock: FC = () => {
                         <div
                           key={'moving-sub' + index}
                           style={{
-                            background: '#191B1F',
+                            background: 'white',
                             opacity: item === '1' ? 1 : 0,
                             width: 30,
                             height: 30,
                             margin: 1,
                           }}
                         >
-                          {/* {item} */}
+                          {item}
                         </div>
                       );
                     })}
@@ -581,6 +640,18 @@ export const ELSBlock: FC = () => {
               );
             })}
           </div>
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              zIndex: 10,
+              background: 'black',
+              opacity: isPaused ? 0.8 : 0,
+              width: '100%',
+              height: '100%',
+            }}
+          ></div>
         </div>
       </div>
     </div>
