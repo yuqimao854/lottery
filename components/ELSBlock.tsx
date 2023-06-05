@@ -87,6 +87,7 @@ export const ELSBlock: FC = () => {
   const showListRef = useRef(showList);
   const movingRef = useRef(moving);
   const isGaming = useRef(false);
+  const [gameOver, setGameOver] = useState(false);
   const nextBlockIndex = useRef<number>();
   const [nextBlock, setNextBlock] = useState<number[]>([]);
   const movingType = useRef({
@@ -221,7 +222,7 @@ export const ELSBlock: FC = () => {
       setIsPaused(false);
       setIsStared(false);
       timer && clearInterval(timer);
-      console.log('over');
+      setGameOver(true);
     } else {
       setNextBlock(onGetNextNewBlock());
     }
@@ -614,11 +615,16 @@ export const ELSBlock: FC = () => {
             left: 0,
             zIndex: 10,
             background: 'black',
-            opacity: isPaused ? 0.8 : 0,
+            opacity: isPaused || gameOver ? 0.8 : 0,
             width: '100%',
             height: '100%',
           }}
-        ></div>
+          className=' flex items-center justify-center'
+        >
+          <div className='text-center font-bold text-teal-50 text-8xl align-middle'>
+            {isPaused ? 'Pause' : 'Game Over'}
+          </div>
+        </div>
       </div>
       <div className='flex  mt-4 mb-4'>
         <div className='mr-4  items-center flex justify-center flex-col'>
@@ -634,6 +640,7 @@ export const ELSBlock: FC = () => {
               timer = setInterval(() => {
                 handleDown();
               }, 600);
+              setGameOver(false);
             }}
             className=' w-6  h-6 rounded-[50%] bg-amber-400 active:bg-amber-600 active:shadow-2xl'
           ></div>
@@ -643,6 +650,9 @@ export const ELSBlock: FC = () => {
           <div
             className='w-6  h-6 rounded-[50%] bg-amber-400 active:bg-amber-600 active:shadow-2xl'
             onClick={() => {
+              if (gameOver || !isStared) {
+                return;
+              }
               if (isGaming.current) {
                 timer && clearInterval(timer);
                 timer = null;
@@ -667,6 +677,7 @@ export const ELSBlock: FC = () => {
               setMoving(new Array(ROW).fill(0));
               setShowList(new Array(ROW).fill(0));
               setNextBlock([]);
+              setGameOver(false);
               isGaming.current = false;
               totalScore.current = 0;
               nextBlockIndex.current = undefined;
