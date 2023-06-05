@@ -87,6 +87,8 @@ export const ELSBlock: FC = () => {
   const showListRef = useRef(showList);
   const movingRef = useRef(moving);
   const isGaming = useRef(false);
+  const nextBlockIndex = useRef<number>();
+  const [nextBlock, setNextBlock] = useState<number[]>([]);
   const movingType = useRef({
     type: EType.I,
     transferred: false,
@@ -129,7 +131,14 @@ export const ELSBlock: FC = () => {
   };
 
   const onCreateNewBlock = () => {
-    const { item: startItem, type } = START_LIST[getRandom(START_LIST.length)];
+    const { item: startItem, type } =
+      START_LIST[
+        nextBlockIndex.current === undefined
+          ? getRandom(START_LIST.length)
+          : nextBlockIndex.current
+      ];
+
+    nextBlockIndex.current = getRandom(START_LIST.length);
     movingType.current.type = type;
     movingType.current.transferred = false;
     const maxMoveStep = Math.min(
@@ -140,6 +149,12 @@ export const ELSBlock: FC = () => {
 
     return randomStartItem;
   };
+
+  const onGetNextNewBlock = () => {
+    const { item: startItem } = START_LIST[nextBlockIndex.current ?? 0];
+    return startItem;
+  };
+
   const onStart = () => {
     const startItem = onCreateNewBlock();
     return startItem;
@@ -195,7 +210,6 @@ export const ELSBlock: FC = () => {
 
   const handleStart = () => {
     const startItem = onStart();
-
     const newMoving = new Array(ROW).fill(0);
 
     startItem.forEach((item, index) => {
@@ -208,6 +222,8 @@ export const ELSBlock: FC = () => {
       setIsStared(false);
       timer && clearInterval(timer);
       console.log('over');
+    } else {
+      setNextBlock(onGetNextNewBlock());
     }
   };
 
@@ -493,108 +509,14 @@ export const ELSBlock: FC = () => {
   }, []);
 
   return (
-    <div>
-      <div>
-        <div className='flex mb-4'>
-          <div
-            onClick={() => {
-              if (isStared) {
-                return;
-              }
-              setIsStared(true);
-              isGaming.current = true;
-              totalScore.current = 0;
-              handleStart();
-              timer = setInterval(() => {
-                handleDown();
-              }, 600);
-            }}
-            className='mr-4'
-          >
-            start
-          </div>
-          <div
-            className='mr-4'
-            onClick={() => {
-              if (isGaming.current) {
-                timer && clearInterval(timer);
-                timer = null;
-              } else {
-                timer = setInterval(() => {
-                  handleDown();
-                }, 600);
-              }
-              isGaming.current = !isGaming.current;
-              setIsPaused(!isPaused);
-            }}
-          >
-            {isPaused ? 'continue' : 'pause'}
-          </div>
-          <div
-            className='mr-4'
-            onClick={() => {
-              setIsPaused(false);
-              setIsStared(false);
-              setMoving(new Array(ROW).fill(0));
-              setShowList(new Array(ROW).fill(0));
-              isGaming.current = false;
-              totalScore.current = 0;
-              timer && clearInterval(timer);
-              timer = null;
-            }}
-          >
-            reset
-          </div>
-        </div>
-        <div className='flex mt-10'>
-          <div
-            className='mr-4'
-            onClick={() => {
-              handleLeft();
-            }}
-          >
-            left
-          </div>
-          <div
-            className='mr-4'
-            onClick={() => {
-              handleRight();
-            }}
-          >
-            right
-          </div>
-          <div
-            className='mr-4'
-            onClick={() => {
-              handleTransfer();
-            }}
-          >
-            transfer
-          </div>
-
-          <div
-            className='mr-4'
-            onClick={() => {
-              handleDown();
-            }}
-          >
-            down
-          </div>
-          <div
-            onClick={() => {
-              onDrop();
-            }}
-          >
-            drop
-          </div>
-        </div>
-        <div className='mt-10  mb-10'>{totalScore.current}</div>
+    <div className='flex h-[100vh] bg-red-900 flex-col  items-center content-center pt-4'>
+      <div className='flex relative w-full  bg-slate-400 '>
         <div
           style={{
             position: 'relative',
-            border: '1px solid gray',
             width: 'fit-content',
           }}
+          className=' border-r-2 border-r-zinc-800'
         >
           <div>
             {showList.map((item, index) => {
@@ -605,13 +527,12 @@ export const ELSBlock: FC = () => {
                     .map((item, index) => {
                       return (
                         <div
+                          className='w-6 h-6'
                           key={'sub' + index}
                           style={{
                             opacity: item === '1' ? 1 : 0,
                             background: '#191B1F',
                             margin: 1,
-                            width: 30,
-                            height: 30,
                           }}
                         >
                           {/* {item} */}
@@ -637,12 +558,12 @@ export const ELSBlock: FC = () => {
                     .map((item, index) => {
                       return (
                         <div
+                          className='w-6 h-6'
                           key={'moving-sub' + index}
                           style={{
                             background: '#191B1F',
                             opacity: item === '1' ? 1 : 0,
-                            width: 30,
-                            height: 30,
+
                             margin: 1,
                           }}
                         >
@@ -654,17 +575,155 @@ export const ELSBlock: FC = () => {
               );
             })}
           </div>
+        </div>
+        <div className=' text-center flex-1 overflow-hidden'>
+          <div className=' '>Score</div>
+          <div className='mt-3   font-bold text-4xl'>{totalScore.current}</div>
+
+          <div className='mt-10 font-bold '>Next Block</div>
+          <div className=' mt-10 translate-x-6'>
+            {nextBlock.map((item, index) => {
+              return (
+                <div style={{ display: 'flex' }} key={'next_main' + index}>
+                  {decimalToBinary(item)
+                    .split('')
+                    .slice(0, 4)
+                    .map((item, index) => {
+                      return (
+                        <div
+                          className='w-6 h-6'
+                          key={'next_sub' + index}
+                          style={{
+                            opacity: item === '1' ? 1 : 0,
+                            background: '#191B1F',
+                            margin: 1,
+                          }}
+                        ></div>
+                      );
+                    })}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            zIndex: 10,
+            background: 'black',
+            opacity: isPaused ? 0.8 : 0,
+            width: '100%',
+            height: '100%',
+          }}
+        ></div>
+      </div>
+      <div className='flex  mt-4 mb-4'>
+        <div className='mr-4  items-center flex justify-center flex-col'>
           <div
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              zIndex: 10,
-              background: 'black',
-              opacity: isPaused ? 0.8 : 0,
-              width: '100%',
-              height: '100%',
+            onClick={() => {
+              if (isStared) {
+                return;
+              }
+              setIsStared(true);
+              isGaming.current = true;
+              totalScore.current = 0;
+              handleStart();
+              timer = setInterval(() => {
+                handleDown();
+              }, 600);
             }}
+            className=' w-6  h-6 rounded-[50%] bg-amber-400 active:bg-amber-600 active:shadow-2xl'
+          ></div>
+          <div className=' text-amber-100 '> on/off</div>
+        </div>
+        <div className='mr-4  items-center flex justify-center flex-col'>
+          <div
+            className='w-6  h-6 rounded-[50%] bg-amber-400 active:bg-amber-600 active:shadow-2xl'
+            onClick={() => {
+              if (isGaming.current) {
+                timer && clearInterval(timer);
+                timer = null;
+              } else {
+                timer = setInterval(() => {
+                  handleDown();
+                }, 600);
+              }
+              isGaming.current = !isGaming.current;
+              setIsPaused(!isPaused);
+            }}
+          ></div>
+          <div className='text-amber-100'>pause/play</div>
+        </div>
+
+        <div className='mr-4  items-center flex justify-center flex-col'>
+          <div
+            className='w-6  h-6 rounded-[50%] bg-amber-400 active:bg-amber-600 active:shadow-2xl '
+            onClick={() => {
+              setIsPaused(false);
+              setIsStared(false);
+              setMoving(new Array(ROW).fill(0));
+              setShowList(new Array(ROW).fill(0));
+              setNextBlock([]);
+              isGaming.current = false;
+              totalScore.current = 0;
+              nextBlockIndex.current = undefined;
+              timer && clearInterval(timer);
+              timer = null;
+            }}
+          ></div>
+          <div className='text-amber-100'> reset</div>
+        </div>
+      </div>
+      <div className='flex mt-10   items-center '>
+        <div>
+          <div className='flex w-[9rem] justify-center'>
+            <div
+              className='text-amber-100  font-bold text-4xl leading-[3rem] text-center w-12  h-12 rounded-[50%] bg-amber-400 active:bg-amber-600 active:shadow-2xl '
+              onClick={() => {
+                handleTransfer();
+              }}
+            >
+              ↑
+            </div>
+          </div>
+          <div className='flex  w-[9rem] justify-between'>
+            <div
+              className='text-amber-100 font-bold text-4xl leading-[3rem] text-center w-12  h-12 rounded-[50%] bg-amber-400 active:bg-amber-600 active:shadow-2xl  '
+              onClick={() => {
+                handleLeft();
+              }}
+            >
+              ←
+            </div>
+            <div
+              className='text-amber-100 font-bold text-4xl leading-[3rem] text-center w-12  h-12 rounded-[50%] bg-amber-400 active:bg-amber-600 active:shadow-2xl '
+              onClick={() => {
+                handleRight();
+              }}
+            >
+              →
+            </div>
+          </div>
+          <div className='flex w-[9rem] justify-center'>
+            <div
+              className='text-amber-100 font-bold text-4xl leading-[3rem] text-center w-12  h-12 rounded-[50%] bg-amber-400 active:bg-amber-600 active:shadow-2xl '
+              onClick={() => {
+                handleDown();
+              }}
+            >
+              ↓
+            </div>
+          </div>
+        </div>
+        <div className='ml-24'>
+          <div
+            onClick={() => {
+              onDrop();
+            }}
+            className='font-bold text-4xl  text-center  w-24  h-24 rounded-[50%] bg-amber-400 active:bg-amber-600 active:shadow-2xl '
           ></div>
         </div>
       </div>
