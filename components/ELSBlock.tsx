@@ -566,6 +566,15 @@ export const ELSBlock: FC = () => {
           <div
             className='mr-4'
             onClick={() => {
+              handleTransfer();
+            }}
+          >
+            transfer
+          </div>
+
+          <div
+            className='mr-4'
+            onClick={() => {
               handleDown();
             }}
           >
