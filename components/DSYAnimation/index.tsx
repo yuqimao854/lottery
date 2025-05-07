@@ -1,7 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Image from 'next/image';
 
 const TEXT = '2025年纪念';
 const images = ['/images/dsy/1.jpg', '/images/dsy/4.jpg', '/images/dsy/8.jpg'];
@@ -139,7 +138,7 @@ export const DSYIntroAnimation = ({
             exit='exit'
             className='w-64 h-96 overflow-hidden rounded-2xl shadow-lg'
           >
-            <Image
+            <img
               src={images[imgIndex]}
               alt={`img-${imgIndex}`}
               width={256}
