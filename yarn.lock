@@ -380,6 +380,11 @@
   "resolved" "https://registry.npmmirror.com/caniuse-lite/-/caniuse-lite-1.0.30001358.tgz"
   "version" "1.0.30001358"
 
+"canvas-confetti@^1.9.3":
+  "integrity" "sha512-rFfTURMvmVEX1gyXFgn5QMn81bYk70qa0HLzcIOSVEyl57n6o9ItHeBtUSWdvKAPY0xlvBHno4/v3QPrT83q9g=="
+  "resolved" "https://registry.npmjs.org/canvas-confetti/-/canvas-confetti-1.9.3.tgz"
+  "version" "1.9.3"
+
 "chalk@^4.0.0":
   "integrity" "sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA=="
   "resolved" "https://registry.npmmirror.com/chalk/-/chalk-4.1.2.tgz"
@@ -868,12 +873,12 @@
   "resolved" "https://registry.npmjs.org/fraction.js/-/fraction.js-4.2.0.tgz"
   "version" "4.2.0"
 
-"framer-motion@^12.10.0":
-  "integrity" "sha512-fce/SPS/lrIHYLGfRNytdvzwotc43hBGnEGjXAS304xB+uX9iAm0BpPDx9SuO3TatJkQMm9mglVu94wIPdOTjw=="
-  "resolved" "https://registry.npmjs.org/framer-motion/-/framer-motion-12.10.0.tgz"
-  "version" "12.10.0"
+"framer-motion@^12.10.1":
+  "integrity" "sha512-g+fANUVC17SzQc6eA0CtomBW4n67ckhS2hq5fjkKZneKzv7sbdXK3zzjnnAKB22Ck+Qhh+IlO5RjHNKULsq99Q=="
+  "resolved" "https://registry.npmjs.org/framer-motion/-/framer-motion-12.10.1.tgz"
+  "version" "12.10.1"
   dependencies:
-    "motion-dom" "^12.10.0"
+    "motion-dom" "^12.10.1"
     "motion-utils" "^12.9.4"
     "tslib" "^2.4.0"
 
@@ -1304,10 +1309,10 @@
   "resolved" "https://registry.npmmirror.com/minimist/-/minimist-1.2.6.tgz"
   "version" "1.2.6"
 
-"motion-dom@^12.10.0":
-  "integrity" "sha512-TbRFEjQmRIDEFXJFIHfvM3VW8PuQ8bSWwwYxWA5Elq+GCghzqYUQ1FDQK/K6PmtmOoLiQY3ttJE6CrOedRrGgw=="
-  "resolved" "https://registry.npmjs.org/motion-dom/-/motion-dom-12.10.0.tgz"
-  "version" "12.10.0"
+"motion-dom@^12.10.1":
+  "integrity" "sha512-rY8DNqgKh4LeFSQBkuXpe/7sycYS9RM+4luukjHpHogF1liSvIp0Hedx0q2QsWNz+AHuZ5bZQ9j9QZSUCA8bbw=="
+  "resolved" "https://registry.npmjs.org/motion-dom/-/motion-dom-12.10.1.tgz"
+  "version" "12.10.1"
   dependencies:
     "motion-utils" "^12.9.4"
 

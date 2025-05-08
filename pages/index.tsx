@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 
-const routerList = ['dsy', 'block'];
+const routerList = ['dsy', 'block', 'dsyPC'];
 
 const Home: NextPage = () => {
   const [password, setPassword] = useState('');

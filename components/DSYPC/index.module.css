@@ -1,0 +1,241 @@
+.scene {
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
+  perspective: 1200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+/* 星空背景 */
+.starry-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.star {
+  position: absolute;
+  top: -10px;
+  width: 2px;
+  height: 80px;
+  background: linear-gradient(white, transparent);
+  opacity: 0.6;
+  animation: fall linear infinite;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(0) translateX(0) scaleX(0.5);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) translateX(-50px) scaleX(0.5);
+    opacity: 0;
+  }
+}
+
+.sphere {
+  position: relative;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+  animation: bounce 2s ease-in-out infinite;
+  z-index: 1;
+}
+
+.innerSphere {
+  position: absolute;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+  animation: rotateShape 20s linear infinite;
+}
+
+.sphere:has(.image:hover),
+.innerSphere:has(.image:hover) {
+  animation-play-state: paused;
+  .image {
+    box-shadow: none;
+    animation-play-state: paused;
+  }
+}
+/* 使图片放大并显示在最前面 */
+.image {
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
+  box-shadow: 0 0 12px #ffffff22;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, z-index 0.3s ease;
+  transform: translate3d(var(--x), var(--y), var(--z)) scale(1);
+  animation: glow 1.5s ease-in-out infinite alternate;
+  cursor: pointer;
+  z-index: 1; /* 默认在后面 */
+}
+.image:hover{
+  transform: translate3d(var(--x), var(--y), var(--z)) scale(1.2);
+}
+
+
+
+.activeImage {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(3);
+  z-index: 10000;
+  width: 20vw;
+  height: 20vh;
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
+  box-shadow: 0 0 40px #ffffffaa;
+  cursor: pointer;
+  animation: zoomIn 0.3s ease forwards,  glow 1.5s ease-in-out infinite alternate;
+}
+
+.activeImage.exit {
+  animation: zoomOut 0.3s ease forwards;
+}
+ 
+
+/* 背景遮罩 */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 999;
+
+}
+
+ 
+
+@keyframes rotateShape {
+  0% {
+    transform: rotateY(0deg) rotateX(0deg);
+  }
+  33% {
+    transform: rotateY(90deg) rotateX(30deg);
+  }
+  66% {
+    transform: rotateY(180deg) rotateX(0deg);
+  }
+  100% {
+    transform: rotateY(360deg) rotateX(0deg);
+  }
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-40px);
+  }
+}
+
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 10px #ffffff33;
+  }
+  100% {
+    box-shadow: 0 0 25px #ffffff88;
+  }
+}
+
+/* 恒星闪烁背景层 */
+.starry-sky {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: black;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.starry-sky .twinkle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: white;
+  opacity: 0.1;
+  border-radius: 50%;
+  animation: twinkle 3s infinite ease-in-out;
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.4);
+  }
+}
+
+
+/* 银河旋转的慢速层 */
+.galaxy {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+  background: radial-gradient(circle, #3b0a45, #000000);
+  background-size: cover;
+  animation: rotateGalaxy 200s linear infinite; /* 超慢旋转 */
+  pointer-events: none;
+}
+
+/* 银河旋转动画 */
+@keyframes rotateGalaxy {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* 点击时图片放大并置顶到屏幕中央 */
+@keyframes zoomIn {
+  from {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, -50%) scale(3);
+    opacity: 1;
+  }
+}
+
+@keyframes zoomOut {
+  from {
+    transform: translate(-50%, -50%) scale(3);
+    opacity: 1;
+  }
+  to {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0;
+  }
+}
