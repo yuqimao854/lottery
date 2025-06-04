@@ -12,13 +12,15 @@ function MyApp({ Component, pageProps }: AppProps) {
     router.push('/');
   };
 
+  const noBackButton = ['/dsyPC', '/muzi'];
+
   return (
     <div className='min-h-screen bg-gradient-to-br from-blue-100 to-white font-sans relative'>
       {/* 页面主体内容 */}
       <Component {...pageProps} />
 
       {/* 左下角悬浮按钮 */}
-      {router.pathname !== '/dsyPC' && (
+      {!noBackButton.includes(router.pathname) && (
         <button
           onClick={goHome}
           className='fixed bottom-6 left-6 w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full bg-blue-500 text-white flex items-center justify-center shadow-lg hover:bg-blue-600 transition text-xl sm:text-2xl md:text-3xl'
