@@ -5,4 +5,4 @@ export { TurnTable, Weekend, ELSBlock };
 export * from './DSY';
 export * from './DSYAnimation';
 export * from './DSYPC';
-export * from './Muzi';
+export * from './MUZI';
