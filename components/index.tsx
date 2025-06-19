@@ -6,3 +6,4 @@ export * from './DSY';
 export * from './DSYAnimation';
 export * from './DSYPC';
 export * from './MUZI';
+export * from './LIFEI';

@@ -12,7 +12,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     router.push('/');
   };
 
-  const noBackButton = ['/dsyPC', '/muzi'];
+  const noBackButton = ['/dsyPC', '/muzi', '/lifei'];
 
   return (
     <div className='min-h-screen bg-gradient-to-br from-blue-100 to-white font-sans relative'>
